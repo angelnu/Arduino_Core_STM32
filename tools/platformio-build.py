@@ -23,6 +23,7 @@ https://github.com/stm32duino/Arduino_Core_STM32
 """
 
 
+import os
 from os.path import isfile, isdir, join
 
 from SCons.Script import DefaultEnvironment
@@ -34,7 +35,8 @@ board = env.BoardConfig()
 FRAMEWORK_DIR = platform.get_package_dir("framework-arduinoststm32")
 CMSIS_DIR = join(platform.get_package_dir("framework-arduinoststm32"), "CMSIS", "CMSIS")
 assert isdir(FRAMEWORK_DIR)
-assert isdir(CMSIS_DIR)
+if not isdir(CMSIS_DIR):
+  os.system("cd %s && wget -qO- %s | tar -xjf -" %(FRAMEWORK_DIR, "https://github.com/stm32duino/ArduinoModule-CMSIS/releases/download/5.5.1/CMSIS-5.5.1.tar.bz2"))
 
 
 mcu = env.BoardConfig().get("build.mcu", "")
